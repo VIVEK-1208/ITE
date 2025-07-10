@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./ProductDetail.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { db } from "../firebase"; // ✅ your configured Firestore
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { collection, onSnapshot, doc } from "firebase/firestore";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
@@ -15,10 +16,10 @@ const ProductDetail = () => {
   const [showGallery, setShowGallery] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
+  // 🔄 Realtime Firestore Sync
   useEffect(() => {
-    const fetchProduct = async () => {
-      const docRef = doc(db, "products", id);
-      const docSnap = await getDoc(docRef);
+    const productRef = doc(db, "products", id);
+    const unsubscribeProduct = onSnapshot(productRef, (docSnap) => {
       if (docSnap.exists()) {
         const productData = docSnap.data();
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -27,19 +28,20 @@ const ProductDetail = () => {
         setAddedToCart(!!inCart);
         setProduct({ ...productData, id });
       }
-    };
+    });
 
-    const fetchAllProducts = async () => {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      const list = querySnapshot.docs.map((doc) => ({
+    const unsubscribeAll = onSnapshot(collection(db, "products"), (snapshot) => {
+      const list = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setAllProducts(list);
-    };
+    });
 
-    fetchProduct();
-    fetchAllProducts();
+    return () => {
+      unsubscribeProduct();
+      unsubscribeAll();
+    };
   }, [id]);
 
   const showToast = (msg) => {
@@ -112,7 +114,7 @@ const ProductDetail = () => {
     localStorage.setItem("cartChanged", Date.now());
   };
 
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <div className="loading-msg">Loading...</div>;
 
   const relatedProducts = allProducts
     .filter(
@@ -124,11 +126,13 @@ const ProductDetail = () => {
 
   return (
     <div className="product-page">
+      {/* Breadcrumbs */}
       <div className="breadcrumbs">
-        <Link to="/">Home</Link> <span>&gt;</span> <Link to="/shop">Shop</Link>{" "}
-        <span>&gt;</span> <span>{product.name}</span>
+        <Link to="/">Home</Link> <span>&gt;</span>{" "}
+        <Link to="/shop">Shop</Link> <span>&gt;</span> <span>{product.name}</span>
       </div>
 
+      {/* Product Main */}
       <div className="product-main">
         <div className="product-left">
           <img src={product.image} alt={product.name} className="product-img" />
@@ -142,14 +146,8 @@ const ProductDetail = () => {
           <h1 className="product-title">{product.name}</h1>
           <p className="product-brand">{product.brand}</p>
           <p className="product-description">{product.description}</p>
-          <p
-            className={`product-stock ${
-              product.quantity === 0 ? "out" : "in"
-            }`}
-          >
-            {product.quantity === 0
-              ? "Out of Stock"
-              : `In Stock: ${product.quantity}`}
+          <p className={`product-stock ${product.quantity === 0 ? "out" : "in"}`}>
+            {product.quantity === 0 ? "Out of Stock" : `In Stock: ${product.quantity}`}
           </p>
 
           <div className="product-action-row">
@@ -183,6 +181,7 @@ const ProductDetail = () => {
 
       <hr className="section-divider" />
 
+      {/* Related Items */}
       <div className="related-section">
         <div className="related-header">
           <button className="scroll-arrow">←</button>
@@ -205,13 +204,10 @@ const ProductDetail = () => {
         </div>
       </div>
 
+      {/* Gallery Modal */}
       {showGallery && (
         <div className="gallery-overlay" onClick={() => setShowGallery(false)}>
-          <img
-            src={product.image}
-            alt="Full View"
-            className="full-gallery-image"
-          />
+          <img src={product.image} alt="Full View" className="full-gallery-image" />
         </div>
       )}
 

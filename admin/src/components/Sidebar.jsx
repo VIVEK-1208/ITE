@@ -35,10 +35,15 @@ const Sidebar = () => {
 
   <div className="user-info">
     <img
-      src={currentUser?.photoURL || "/img/default-profile.png"}
-      alt="Admin"
-      className="admin-avatar"
-    />
+  src={currentUser?.photoURL || "/img/default-profile.png"}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/img/default-profile.png";
+  }}
+  alt="Admin"
+  className="admin-avatar"
+/>
+
     <div className="user-details">
       <p>{currentUser?.displayName || "User Name"}</p>
       <span className="user-role">Admin</span>

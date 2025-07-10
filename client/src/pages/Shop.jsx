@@ -1,36 +1,56 @@
-// Shop.jsx
 import React, { useState, useEffect } from 'react';
 import './Shop.css';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const Shop = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-
   const [filters, setFilters] = useState({
     brand: [],
     price: [],
     search: '',
   });
 
-  // Fetch products from Firestore
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, 'products'));
-        const fetched = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProducts(fetched);
-      } catch (err) {
-        console.error('Failed to fetch products:', err);
-      }
-    };
+  // Fixed brand list (all lowercase for comparison)
+  const knownBrands = [
+    'brislay',
+    'dewalt',
+    'eibenstock positron',
+    'kpt',
+    'polymak'
+  ];
 
-    fetchProducts();
+  // 🔄 Realtime listener from Firestore
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, 'products'),
+      (snapshot) => {
+        const fetched = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          const brand = data.brand?.toLowerCase();
+
+          // If brand is unknown, mark as "Others"
+          return {
+            id: doc.id,
+            ...data,
+            displayBrand: knownBrands.includes(brand)
+              ? data.brand
+              : 'Others',
+            searchName: data.name?.toLowerCase() || '',
+            originalBrand: data.brand || '',
+          };
+        });
+
+        setProducts(fetched);
+      },
+      (error) => {
+        console.error('Failed to listen to products:', error);
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
 
   const handleBrandChange = (brand) => {
@@ -60,19 +80,50 @@ const Shop = () => {
   };
 
   const applyFilters = (product) => {
-    const matchBrand =
-      filters.brand.length === 0 || filters.brand.includes(product.brand);
-    const matchPrice =
-      filters.price.length === 0 ||
-      filters.price.some((range) => {
-        const [min, max] = range.split('-').map(Number);
-        return product.price >= min && product.price <= max;
-      });
-    const matchSearch =
-      product.name.toLowerCase().includes(filters.search.toLowerCase());
+  const productBrand = product.displayBrand || 'Others';
+  const productName = product.searchName || '';
 
-    return matchBrand && matchPrice && matchSearch;
-  };
+  const matchBrand =
+    filters.brand.length === 0 ||
+    filters.brand.some(
+      (selected) => selected.toLowerCase() === productBrand.toLowerCase()
+    );
+
+  const matchPrice =
+    filters.price.length === 0 ||
+    filters.price.some((range) => {
+      const [min, max] = range.split('-').map(Number);
+      return product.price >= min && product.price <= max;
+    });
+
+  const matchSearch = (() => {
+  const search = filters.search.toLowerCase();
+  const name = product.name?.toLowerCase() || "";
+  const brand = product.brand?.toLowerCase() || "";
+  const description = product.description?.toLowerCase() || "";
+  const keywords = (product.keywords || []).map((kw) => kw.toLowerCase());
+
+  return (
+    name.includes(search) ||
+    brand.includes(search) ||
+    description.includes(search) ||
+    keywords.some((kw) => kw.includes(search))
+  );
+})();
+
+
+  return matchBrand && matchPrice && matchSearch;
+};
+
+
+  const brandOptions = [
+    'Brislay',
+    'Dewalt',
+    'Eibenstock Positron',
+    'KPT',
+    'Polymak',
+    'Others',
+  ];
 
   return (
     <div className="shop-wrapper">
@@ -83,7 +134,7 @@ const Shop = () => {
 
           <div className="filter-group">
             <label>Brand</label>
-            {['Brislay', 'Dewalt', 'Eibenstock Positron', 'KPT', 'Polymak'].map((brand) => (
+            {brandOptions.map((brand) => (
               <div key={brand} className="filter-option">
                 <input
                   type="checkbox"
@@ -139,7 +190,7 @@ const Shop = () => {
               >
                 <img src={product.image} alt={product.name} />
                 <h4>{product.name}</h4>
-                <p>Brand: {product.brand}</p>
+                <p>Brand: {product.displayBrand}</p>
                 <p>₹{product.price}</p>
               </div>
             ))}
