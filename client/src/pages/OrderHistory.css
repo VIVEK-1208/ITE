@@ -1,0 +1,175 @@
+.order-history {
+  padding: 8rem 1rem 4rem;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(to bottom right, #fdfbfb, #ebedee);
+  min-height: 85vh;
+}
+
+.order-history h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #222;
+  margin-bottom: 2.5rem;
+}
+
+.order-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.order-filters input,
+.order-filters select,
+.order-filters button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.order-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  margin: 1rem auto;
+  max-width: 700px;
+  transition: transform 0.2s ease;
+}
+
+.order-card:hover {
+  transform: scale(1.01);
+}
+
+.order-card p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.status-badge.Processing {
+  background-color: #f0ad4e;
+}
+
+.status-badge.Shipped {
+  background-color: #5bc0de;
+}
+
+.status-badge.Delivered {
+  background-color: #5cb85c;
+}
+
+.status-badge.Cancelled {
+  background-color: #d9534f;
+}
+
+.order-progress {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.order-progress .step {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  font-size: 0.9rem;
+  color: #999;
+  border-bottom: 3px solid #ddd;
+}
+
+.order-progress .step.active {
+  font-weight: bold;
+  color: #070707;
+  border-color: #28a745;
+}
+
+.item-line {
+  margin-left: 1rem;
+  font-style: italic;
+  color: #444;
+}
+
+.order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* OrderHistory.css */
+.order-status-msg {
+  min-height: 81.75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+  text-align: center;
+  color: #333;
+  padding: 2rem 1rem;
+  gap: 2rem;
+  background: linear-gradient(to bottom right, #fffefc, #f2f4f7);
+}
+
+.order-status-msg p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #444;
+}
+
+.status-img {
+  width: 620px;
+  max-width: 90%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0.95;
+}
+.status-img2 {
+  width: 220px;
+  max-width: 90%;
+  height: auto;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .order-card {
+    padding: 1rem;
+  }
+
+  .order-progress .step {
+    font-size: 0.75rem;
+    padding: 6px;
+  }
+
+  .order-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.step {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  background: #ccc;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.step.active {
+  background-color: #28a745;
+  color: white;
+}

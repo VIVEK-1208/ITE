@@ -1,0 +1,18 @@
+.brand-wrapper {
+  background-color: #f8f9fa;
+  padding: 60px 0;
+}
+
+.brand-card {
+  width: 200px;
+  height: 100px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.brand-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}

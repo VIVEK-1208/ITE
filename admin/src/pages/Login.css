@@ -1,0 +1,33 @@
+/* admin-panel/src/pages/LoginPage.css */
+.login-page {
+  min-height: 98.25vh;
+  min-width: 97.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #e0f7fa, #80deea);
+}
+
+.login-box {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.google-login-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.google-login-btn:hover {
+  background-color: #3367d6;
+}

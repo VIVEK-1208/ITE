@@ -1,0 +1,75 @@
+
+.invoice-page {
+  max-width: 800px;
+  margin: 7rem auto;
+  padding: 3rem;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  border-radius: 12px;
+  color: #333;
+}
+
+.invoice-page h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #0a58ca;
+}
+
+.invoice-page h3 {
+  margin-top: 1.8rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+  color: #444;
+}
+
+.invoice-page p, .invoice-page li {
+  font-size: 1rem;
+  margin: 0.4rem 0;
+}
+
+.invoice-page ul {
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+.home-btn {
+  display: inline-block;
+  background: #0a58ca;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.home-btn:hover {
+  background: #004494;
+}
+
+@media (max-width: 600px) {
+  .invoice-page {
+    margin: 7rem 1rem;
+    padding: 1rem;
+  }
+
+  .invoice-page h2 {
+    font-size: 1.5rem;
+  }
+
+  .invoice-page h3 {
+    font-size: 1rem;
+  }
+}
+.redirect-message {
+  font-size: 1rem;
+  margin: 10px 0;
+  color: #555;
+  font-style: italic;
+}

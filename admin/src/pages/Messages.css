@@ -1,0 +1,25 @@
+.admin-messages-container {
+  padding: 2rem;
+  min-height: 80vh;
+  font-family: "Segoe UI", sans-serif;
+  margin-left: 250px;
+}
+
+.messages-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.messages-table th,
+.messages-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.messages-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}

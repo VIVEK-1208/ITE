@@ -1,0 +1,100 @@
+.process-section {
+  padding: 2rem 0;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.process-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+}
+
+.steps-container {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.step-card {
+  position: relative;
+  height: 200px;
+  width: 300px;
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.step-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.step-icon {
+  font-size: 2.5rem;
+  background-color: #fff7d4;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4aa00;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.step-card:hover .step-icon {
+  transform: scale(0.85);
+  opacity: 0.7;
+}
+
+.step-card h3 {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.step-card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.step-line {
+  position: absolute;
+  top: 30px;
+  right: -40px;
+  width: 40px;
+  height: 2px;
+  background-color: #ccc;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .steps-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step-line {
+    display: none;
+  }
+}

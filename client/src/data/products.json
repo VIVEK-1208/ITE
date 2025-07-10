@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Bosch Drill",
+    "brand": "Brislay",
+    "price": 4500,
+    "image": "/img/tool1.jpg",
+    "description": "High-performance Bosch drill perfect for industrial and home use.",
+    "quantity": 5,
+    "type": "Tool",
+    "weight": 2.5,
+    "keywords": ["bosch", "drill", "power tool", "construction", "electric drill"]
+  },
+  {
+    "id": 2,
+    "name": "Makita Cutter",
+    "brand": "Dewalt",
+    "price": 3200,
+    "image": "/img/tool2.jpg",
+    "description": "Efficient Makita cutter designed for precise and clean cutting tasks.",
+    "quantity": 0,
+    "type": "Tool",
+    "weight": 1.8,
+    "keywords": ["makita", "cutter", "cutting tool", "electric cutter", "dewalt"]
+  },
+  {
+    "id": 3,
+    "name": "Bosch Drill",
+    "brand": "Brislay",
+    "price": 4500,
+    "image": "/img/tool1.jpg",
+    "description": "High-performance Bosch drill perfect for industrial and home use.",
+    "quantity": 5,
+    "type": "Tool",
+    "weight": 2.5,
+    "keywords": ["bosch", "drill", "power tool", "construction", "electric drill"]
+  },
+  {
+    "id": 4,
+    "name": "Makita Cutter",
+    "brand": "Dewalt",
+    "price": 3200,
+    "image": "/img/tool2.jpg",
+    "description": "Efficient Makita cutter designed for precise and clean cutting tasks.",
+    "quantity": 1,
+    "type": "Tool",
+    "weight": 1.8,
+    "keywords": ["makita", "cutter", "cutting tool", "electric cutter", "dewalt"]
+  },
+  {
+    "id": 5,
+    "name": "Bosch Drill",
+    "brand": "Brislay",
+    "price": 4500,
+    "image": "/img/tool1.jpg",
+    "description": "High-performance Bosch drill perfect for industrial and home use.",
+    "quantity": 5,
+    "type": "Tool",
+    "weight": 2.5,
+    "keywords": ["bosch", "drill", "power tool", "construction", "electric drill"]
+  },
+  {
+    "id": 6,
+    "name": "Makita Cutter",
+    "brand": "Dewalt",
+    "price": 3200,
+    "image": "/img/tool2.jpg",
+    "description": "Efficient Makita cutter designed for precise and clean cutting tasks.",
+    "quantity": 0,
+    "type": "Tool",
+    "weight": 1.8,
+    "keywords": ["makita", "cutter", "cutting tool", "electric cutter", "dewalt"]
+  },
+  {
+    "id": 7,
+    "name": "Bosch Drill",
+    "brand": "Brislay",
+    "price": 4500,
+    "image": "/img/tool1.jpg",
+    "description": "High-performance Bosch drill perfect for industrial and home use.",
+    "quantity": 5,
+    "type": "Tool",
+    "weight": 2.5,
+    "keywords": ["bosch", "drill", "power tool", "construction", "electric drill"]
+  },
+  {
+    "id": 8,
+    "name": "Makita Cutter",
+    "brand": "Dewalt",
+    "price": 3200,
+    "image": "/img/tool2.jpg",
+    "description": "Efficient Makita cutter designed for precise and clean cutting tasks.",
+    "quantity": 1,
+    "type": "Tool",
+    "weight": 1.8,
+    "keywords": ["makita", "cutter", "cutting tool", "electric cutter", "dewalt"]
+  }
+]

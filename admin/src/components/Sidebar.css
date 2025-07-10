@@ -1,0 +1,103 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background-color: #fef9e7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Logo */
+.logo-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fbc02d;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Avatar Section */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.admin-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #ffeb3b;
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+}
+
+.user-details p {
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.user-role {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Navigation Links */
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 5rem;
+  width: 100%;
+}
+
+.sidebar-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  width: 80%;
+  border-radius: 8px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s;
+  justify-content: center;
+}
+
+.sidebar-links a:hover,
+.sidebar-links a.active {
+  background-color: #fff176;
+  color: #000;
+}
+
+/* Logout */
+.sidebar-footer {
+  margin-top: 8rem;
+  text-align: center;
+}
+
+.sidebar-footer button {
+  background-color: #fbc02d;
+  color: #222;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sidebar-footer button:hover {
+  background-color: #fdd835;
+}
