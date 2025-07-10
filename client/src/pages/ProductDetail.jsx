@@ -2,26 +2,44 @@ import React, { useState, useEffect } from "react";
 import "./ProductDetail.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import productData from "../data/products.json";
+import { db } from "../firebase"; // ✅ your configured Firestore
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [allProducts, setAllProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
-    const foundProduct = productData.find((item) => item.id.toString() === id);
-    if (foundProduct) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const inCart = cart.find((item) => item.id === foundProduct.id);
-      setQuantity(inCart?.quantity || 1);
-      setAddedToCart(!!inCart);
-    }
-    setProduct(foundProduct);
+    const fetchProduct = async () => {
+      const docRef = doc(db, "products", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const productData = docSnap.data();
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const inCart = cart.find((item) => item.id === id);
+        setQuantity(inCart?.quantity || 1);
+        setAddedToCart(!!inCart);
+        setProduct({ ...productData, id });
+      }
+    };
+
+    const fetchAllProducts = async () => {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const list = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAllProducts(list);
+    };
+
+    fetchProduct();
+    fetchAllProducts();
   }, [id]);
 
   const showToast = (msg) => {
@@ -30,7 +48,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    if (product.product === 0) {
+    if (product.quantity === 0) {
       showToast("Product is out of stock");
       return;
     }
@@ -96,6 +114,14 @@ const ProductDetail = () => {
 
   if (!product) return <div>Loading...</div>;
 
+  const relatedProducts = allProducts
+    .filter(
+      (item) =>
+        item.id !== id &&
+        (item.brand === product.brand || item.type === product.type)
+    )
+    .slice(0, 4);
+
   return (
     <div className="product-page">
       <div className="breadcrumbs">
@@ -116,7 +142,11 @@ const ProductDetail = () => {
           <h1 className="product-title">{product.name}</h1>
           <p className="product-brand">{product.brand}</p>
           <p className="product-description">{product.description}</p>
-          <p className={`product-stock ${product.quantity === 0 ? "out" : "in"}`}>
+          <p
+            className={`product-stock ${
+              product.quantity === 0 ? "out" : "in"
+            }`}
+          >
             {product.quantity === 0
               ? "Out of Stock"
               : `In Stock: ${product.quantity}`}
@@ -159,30 +189,22 @@ const ProductDetail = () => {
           <h2>Related Items</h2>
         </div>
         <div className="related-carousel">
-          {productData
-            .filter(
-              (item) =>
-                item.id !== product.id &&
-                (item.brand === product.brand || item.type === product.type)
-            )
-            .slice(0, 4)
-            .map((item, index) => (
-              <div
-                className="related-card"
-                key={index}
-                onClick={() => navigate(`/product/${item.id}`)}
-              >
-                {index === 0 && <span className="item-label">New</span>}
-                <img src={item.image} alt={item.name} />
-                <h4>{item.name}</h4>
-                <div className="related-category">{item.brand}</div>
-                <div className="related-price">₹{item.price}</div>
-              </div>
-            ))}
+          {relatedProducts.map((item, index) => (
+            <div
+              className="related-card"
+              key={item.id}
+              onClick={() => navigate(`/product/${item.id}`)}
+            >
+              {index === 0 && <span className="item-label">New</span>}
+              <img src={item.image} alt={item.name} />
+              <h4>{item.name}</h4>
+              <div className="related-category">{item.brand}</div>
+              <div className="related-price">₹{item.price}</div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Gallery Modal */}
       {showGallery && (
         <div className="gallery-overlay" onClick={() => setShowGallery(false)}>
           <img

@@ -1,17 +1,37 @@
 // Shop.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Shop.css';
-import productsData from '../data/products.json'; // adjust path as needed
 import { useNavigate } from 'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const Shop = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
 
   const [filters, setFilters] = useState({
     brand: [],
     price: [],
     search: '',
   });
+
+  // Fetch products from Firestore
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'products'));
+        const fetched = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(fetched);
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleBrandChange = (brand) => {
     setFilters((prev) => ({
@@ -57,6 +77,7 @@ const Shop = () => {
   return (
     <div className="shop-wrapper">
       <div className="shop-layout">
+        {/* Sidebar Filters */}
         <aside className="sidebar">
           <h3>Filter</h3>
 
@@ -93,6 +114,7 @@ const Shop = () => {
           </button>
         </aside>
 
+        {/* Product Display */}
         <main className="shop-main">
           <div className="search-bar">
             <input
@@ -102,14 +124,16 @@ const Shop = () => {
               onChange={handleSearch}
             />
             {filters.search && (
-              <button onClick={() => setFilters({ ...filters, search: '' })}>×</button>
+              <button onClick={() => setFilters({ ...filters, search: '' })}>
+                ×
+              </button>
             )}
           </div>
 
           <div className="product-grid">
-            {productsData.filter(applyFilters).map((product, index) => (
+            {products.filter(applyFilters).map((product) => (
               <div
-                key={index}
+                key={product.id}
                 className="product-card"
                 onClick={() => navigate(`/product/${product.id}`)}
               >
