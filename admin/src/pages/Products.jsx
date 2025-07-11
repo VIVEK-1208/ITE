@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, onSnapshot } from 'firebase/firestore';
-import {
-  getDocs,
-  doc,
-  deleteDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, onSnapshot, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import "./Products.css";
 
 const ProductList = () => {
@@ -15,27 +9,26 @@ const ProductList = () => {
   const [filterBrand, setFilterBrand] = useState("");
   const [filterType, setFilterType] = useState("");
 
-  const fetchProducts = async () => {
-    const querySnapshot = await getDocs(collection(db, "products"));
-    const productsData = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setProducts(productsData);
-  };
+  const allowedBrands = [
+    "Brislay",
+    "Dewalt",
+    "Eibenstock Positron",
+    "KPT",
+    "Polymak",
+    "Others"
+  ];
 
   useEffect(() => {
-  const unsubscribe = onSnapshot(collection(db, 'products'), (snapshot) => {
-    const productList = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    setProducts(productList);
-  });
+    const unsubscribe = onSnapshot(collection(db, 'products'), (snapshot) => {
+      const productList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setProducts(productList);
+    });
 
-  return () => unsubscribe(); // unsubscribe on component unmount
-}, []);
-
+    return () => unsubscribe();
+  }, []);
 
   const removeProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
@@ -57,15 +50,26 @@ const ProductList = () => {
     }
   };
 
-  const uniqueBrands = [...new Set(products.map((p) => p.brand))];
-  const uniqueTypes = [...new Set(products.map((p) => p.type))];
+  // Filter brands from allowed list (case-insensitive match)
+  const uniqueBrands = allowedBrands;
 
+  // Get unique types case-insensitively
+  const typeMap = new Map();
+  products.forEach(p => {
+    const key = (p.type || "").toLowerCase();
+    if (key && !typeMap.has(key)) {
+      typeMap.set(key, p.type);
+    }
+  });
+  const uniqueTypes = Array.from(typeMap.values());
+
+  // Apply filters (all case-insensitive)
   const filteredProducts = products.filter((product) => {
-    return (
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterBrand === "" || product.brand === filterBrand) &&
-      (filterType === "" || product.type === filterType)
-    );
+    const nameMatch = product.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const brandMatch = filterBrand === "" || product.brand?.toLowerCase() === filterBrand.toLowerCase();
+    const typeMatch = filterType === "" || product.type?.toLowerCase() === filterType.toLowerCase();
+
+    return nameMatch && brandMatch && typeMatch;
   });
 
   return (
@@ -73,40 +77,35 @@ const ProductList = () => {
       <h2>📦 All Products</h2>
 
       <div className="filters">
-  <input
-    type="text"
-    placeholder="🔍 Search by name..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-  />
+        <input
+          type="text"
+          placeholder="🔍 Search by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-  <select value={filterBrand} onChange={(e) => setFilterBrand(e.target.value)}>
-    <option value="">All Brands</option>
-    {uniqueBrands.map((brand, idx) => (
-      <option key={idx} value={brand}>
-        {brand}
-      </option>
-    ))}
-  </select>
+        <select value={filterBrand} onChange={(e) => setFilterBrand(e.target.value)}>
+          <option value="">All Brands</option>
+          {uniqueBrands.map((brand, idx) => (
+            <option key={idx} value={brand}>{brand}</option>
+          ))}
+        </select>
 
-  <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-    <option value="">All Categories</option>
-    {uniqueTypes.map((type, idx) => (
-      <option key={idx} value={type}>
-        {type}
-      </option>
-    ))}
-  </select>
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+          <option value="">All Categories</option>
+          {uniqueTypes.map((type, idx) => (
+            <option key={idx} value={type}>{type}</option>
+          ))}
+        </select>
 
-  <button className="reset-btn" onClick={() => {
-    setSearchTerm('');
-    setFilterBrand('');
-    setFilterType('');
-  }}>
-    🔄 Reset Filters
-  </button>
-</div>
-
+        <button className="reset-btn" onClick={() => {
+          setSearchTerm('');
+          setFilterBrand('');
+          setFilterType('');
+        }}>
+          🔄 Reset Filters
+        </button>
+      </div>
 
       <div className="product-grid">
         {filteredProducts.map((product) => (
