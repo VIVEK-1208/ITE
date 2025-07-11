@@ -42,7 +42,7 @@ const Contact = () => {
       <div className="contact-content container">
         {/* Left Section */}
         <div className="left-section">
-          <img src="/img/contact-us-2.jpg" alt="Office" className="office-img" />
+          <img src="/img/Contact-us-2.jpg" alt="Office" className="office-img" />
           <p className="contact-description">We are here to assist you...</p>
           <div className="contact-info">
             <div className="info-item"><span className="icon">📧</span><a href="mailto:...">support@industrialtools.com</a></div>
