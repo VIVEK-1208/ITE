@@ -188,19 +188,28 @@ const Shop = () => {
           </div>
 
           <div className="product-grid">
-            {products.filter(applyFilters).map((product) => (
-              <div
-                key={product.id}
-                className="product-card"
-                onClick={() => navigate(`/product/${product.id}`)}
-              >
-                <img src={product.image} alt={product.name} />
-                <h4>{product.name}</h4>
-                <p>Brand: {product.originalBrand}</p>
-                <p>₹{product.price}</p>
-              </div>
-            ))}
-          </div>
+  {products.filter(applyFilters).length === 0 ? (
+    <div className="no-products">
+      <img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png" alt="No products" />
+      <h3>No products found</h3>
+      <p>Try adjusting filters or search keyword</p>
+    </div>
+  ) : (
+    products.filter(applyFilters).map((product) => (
+      <div
+        key={product.id}
+        className="product-card"
+        onClick={() => navigate(`/product/${product.id}`)}
+      >
+        <img src={product.image} alt={product.name} />
+        <h4>{product.name}</h4>
+        <p>Brand: {product.originalBrand}</p>
+        <p>₹{product.price}</p>
+      </div>
+    ))
+  )}
+</div>
+
         </main>
       </div>
     </div>
