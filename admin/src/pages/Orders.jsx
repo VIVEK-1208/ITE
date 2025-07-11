@@ -110,24 +110,16 @@ const Orders = () => {
             </ul>
 
             <button
-              onClick={() =>
-                downloadInvoice({
-                  id: selectedOrder.orderId || selectedOrder.id,
-                  customer: `${selectedOrder.deliveryInfo?.firstName || ''} ${selectedOrder.deliveryInfo?.lastName || ''}`,
-                  email: selectedOrder.deliveryInfo?.email,
-                  mobile: selectedOrder.deliveryInfo?.phone,
-                  address: {
-                    street: selectedOrder.deliveryInfo?.street,
-                    city: selectedOrder.deliveryInfo?.city,
-                  },
-                  cart: selectedOrder.cart,
-                  total: selectedOrder.total,
-                  createdAt: new Date(selectedOrder.timestamp),
-                })
-              }
-            >
-              Download Invoice
-            </button>
+  onClick={() =>
+    downloadInvoice({
+      ...selectedOrder,
+      items: selectedOrder.cart || [],
+    })
+  }
+>
+  Download Invoice
+</button>
+
             <button onClick={() => setSelectedOrder(null)}>Close</button>
           </div>
         </div>
