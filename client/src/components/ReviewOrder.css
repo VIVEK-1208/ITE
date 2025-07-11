@@ -22,7 +22,8 @@
   font-size: 2.2rem;
   margin-bottom: 2rem;
   color: #333;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 /* Layout */
@@ -36,7 +37,7 @@
   padding: 0 2rem;
 }
 
-/* Column */
+/* Columns */
 .left-column,
 .right-column {
   flex: 1;
@@ -73,6 +74,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  word-break: break-word;
 }
 
 /* Icon Style */
@@ -144,17 +146,77 @@ hr {
   background-color: rgba(33, 136, 56, 0.9);
 }
 
-/* Responsive */
-@media screen and (max-width: 768px) {
+/* RESPONSIVE STYLES */
+@media screen and (max-width: 992px) {
   .review-order-container {
-    flex-direction: column;
+    padding: 0 1.5rem;
+    gap: 1.5rem;
   }
 
   .card {
     padding: 1.5rem;
   }
+}
 
+@media screen and (max-width: 768px) {
+  .review-order-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .left-column,
+  .right-column {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .card {
+    padding: 1.5rem;
+    width: 100%;
+  }
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .summary-line {
+    font-size: 0.95rem;
+  }
+
+  .change-btn,
   .proceed-btn {
     width: 100%;
+    font-size: 1rem;
+  }
+
+  .review-order-page h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .review-order-container {
+    padding: 0 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .summary-line {
+    font-size: 0.9rem;
+  }
+
+  .change-btn,
+  .proceed-btn {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .card p {
+    font-size: 0.95rem;
   }
 }

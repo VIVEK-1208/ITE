@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import "./OrderInvoice.css";
-import productData from "../data/products.json";
 import { downloadInvoice } from "../utils/DownloadInvoice";
 
 const OrderInvoice = () => {
   const { state } = useLocation();
   const { orderData } = state || {};
   const navigate = useNavigate();
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(15);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -18,7 +17,7 @@ const OrderInvoice = () => {
 
     const redirectTimer = setTimeout(() => {
       navigate("/");
-    }, 10000);
+    }, 15000);
 
     return () => {
       clearInterval(timer);
@@ -43,47 +42,61 @@ const OrderInvoice = () => {
 
   return (
     <div className="invoice-page">
+      {/* ✅ Success animation section */}
+      <div className="success-animation">
+        <div className="checkmark-circle">
+          <span className="checkmark">✓</span>
+        </div>
+        <h2 className="success-text">Order Placed Successfully!</h2>
+      </div>
+
       <h2>🧾 Order Invoice</h2>
-      <p><strong>Order ID:</strong> {orderId}</p>
-      <p><strong>Invoice No:</strong> {invoiceNumber}</p>
-      <p><strong>Order No:</strong> {orderNumber}</p>
-      <p><strong>Payment ID:</strong> {payment?.transactionId || "-"}</p>
-      <p><strong>Paid At:</strong> {payment?.paidAt ? new Date(payment.paidAt).toLocaleString() : "-"}</p>
-      <p><strong>Date:</strong> {new Date(timestamp).toLocaleString()}</p>
+
+      <div className="invoice-section">
+        <p><strong>Order ID:</strong> {orderId}</p>
+        <p><strong>Invoice No:</strong> {invoiceNumber}</p>
+        <p><strong>Order No:</strong> {orderNumber}</p>
+        <p><strong>Payment ID:</strong> {payment?.transactionId || "-"}</p>
+        <p><strong>Paid At:</strong> {payment?.paidAt ? new Date(payment.paidAt).toLocaleString() : "-"}</p>
+        <p><strong>Date:</strong> {timestamp ? new Date(timestamp.seconds ? timestamp.seconds * 1000 : timestamp).toLocaleString() : "-"}</p>
+      </div>
 
       <h3>Delivery Info</h3>
-      <p>{deliveryInfo.firstName} {deliveryInfo.lastName}</p>
-      <p>{deliveryInfo.street}, {deliveryInfo.city}, {deliveryInfo.district}, {deliveryInfo.state} - {deliveryInfo.pincode}</p>
-      <p>Phone: {deliveryInfo.phone}</p>
-      <p>Email: {deliveryInfo.email}</p>
+      <div className="invoice-section">
+        <p>{deliveryInfo.firstName} {deliveryInfo.lastName}</p>
+        <p>{deliveryInfo.street}, {deliveryInfo.city}, {deliveryInfo.district}, {deliveryInfo.state} - {deliveryInfo.pincode}</p>
+        <p>Phone: {deliveryInfo.phone}</p>
+        <p>Email: {deliveryInfo.email}</p>
+      </div>
 
       <h3>Items Ordered</h3>
-      <ul>
-        {cart.map((item, index) => {
-          const product = productData.find((p) => String(p.id) === String(item.id));
-          return (
-            <li key={index}>
-              {product?.name || "Unknown"} × {item.quantity} = ₹{(product?.price || 0) * item.quantity}
-            </li>
-          );
-        })}
+      <ul className="item-list">
+        {cart.map((item, i) => (
+          <li key={i}>
+            {item.name || "Unnamed Product"} × {item.quantity} = ₹{(item.price || 0) * item.quantity}
+          </li>
+        ))}
       </ul>
 
       <h3>Summary</h3>
-      <p>Subtotal: ₹{subtotal}</p>
-      <p>Delivery Fee: ₹{deliveryFee}</p>
-      <p><strong>Total Paid: ₹{total}</strong></p>
+      <div className="invoice-section">
+        <p><strong>Subtotal:</strong> ₹{subtotal}</p>
+        <p><strong>Delivery Fee:</strong> ₹{deliveryFee}</p>
+        <p><strong>Total Paid:</strong> ₹{total}</p>
+      </div>
 
-      <p className="redirect-message">Redirecting to Home in {countdown} seconds...</p>
+      <p className="redirect-message">
+        Redirecting to Home in <strong>{countdown}</strong> seconds...
+      </p>
 
       <button
-  onClick={() =>
-    downloadInvoice({ ...orderData, items: orderData.cart || [] })
-  }
-  className="home-btn"
->
-  Download Invoice PDF
-</button>
+        onClick={() =>
+          downloadInvoice({ ...orderData, items: cart || [] })
+        }
+        className="home-btn"
+      >
+        Download Invoice PDF
+      </button>
 
       <Link to="/" className="home-btn">Back to Home</Link>
     </div>

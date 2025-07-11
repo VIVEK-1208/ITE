@@ -5,6 +5,9 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const Shop = () => {
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [brandOpen, setBrandOpen] = useState(true);
+  const [priceOpen, setPriceOpen] = useState(true);
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
@@ -129,57 +132,76 @@ const Shop = () => {
     <div className="shop-wrapper">
       <div className="shop-layout">
         {/* Sidebar Filters */}
-        <aside className="sidebar">
-          <h3>Filter</h3>
+        {filtersOpen && (
+  <div
+    className="mobile-sidebar-overlay show"
+    onClick={() => setFiltersOpen(false)}
+  />
+)}
+        <aside className={`sidebar ${filtersOpen ? "show" : ""}`}>
+        <h3>Filter</h3>
 
-          <div className="filter-group">
-            <label>Brand</label>
-            {brandOptions.map((brand) => (
-              <div key={brand} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.brand.includes(brand)}
-                  onChange={() => handleBrandChange(brand)}
-                />
-                {brand}
-              </div>
-            ))}
-          </div>
+        <div className="filter-group">
+          <label onClick={() => setBrandOpen(!brandOpen)}>
+  Brand
+  <span className={`arrow ${brandOpen ? "open" : "closed"}`}>▲</span>
+</label>
+          {brandOpen && brandOptions.map((brand) => (
+            <div key={brand} className="filter-option">
+              <input
+                type="checkbox"
+                checked={filters.brand.includes(brand)}
+                onChange={() => handleBrandChange(brand)}
+              />
+              {brand}
+            </div>
+          ))}
+        </div>
 
-          <div className="filter-group">
-            <label>Price</label>
-            {['0-4000', '4000-8000', '8000-12000', '12000-16000', '16000-20000'].map((range) => (
-              <div key={range} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.price.includes(range)}
-                  onChange={() => handlePriceChange(range)}
-                />
-                ₹{range.replace('-', ' - ₹')}
-              </div>
-            ))}
-          </div>
+        <div className="filter-group">
+          <label onClick={() => setPriceOpen(!priceOpen)}>
+  Price
+  <span className={`arrow ${priceOpen ? "open" : "closed"}`}>▲</span>
+</label>
+          {priceOpen && ['0-4000', '4000-8000', '8000-12000', '12000-16000', '16000-20000'].map((range) => (
+            <div key={range} className="filter-option">
+              <input
+                type="checkbox"
+                checked={filters.price.includes(range)}
+                onChange={() => handlePriceChange(range)}
+              />
+              ₹{range.replace('-', ' - ₹')}
+            </div>
+          ))}
+        </div>
 
-          <button onClick={clearFilters} className="clear-button">
-            Clear Filters
-          </button>
-        </aside>
+        <button onClick={clearFilters} className="clear-button">
+          Clear Filters
+        </button>
+      </aside>
 
         {/* Product Display */}
         <main className="shop-main">
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search for products..."
-              value={filters.search}
-              onChange={handleSearch}
-            />
-            {filters.search && (
-              <button onClick={() => setFilters({ ...filters, search: '' })}>
-                ×
-              </button>
-            )}
-          </div>
+          <div className="top-bar">
+  <button className="filter-toggle" onClick={() => setFiltersOpen(!filtersOpen)}>
+    Filters {filtersOpen ? "▲" : "▼"}
+  </button>
+
+  <div className="search-bar">
+    <input
+      type="text"
+      placeholder="Search for products..."
+      value={filters.search}
+      onChange={handleSearch}
+    />
+    {filters.search && (
+      <button onClick={() => setFilters({ ...filters, search: '' })}>
+        ×
+      </button>
+    )}
+  </div>
+</div>
+
 
           <div className="product-grid">
             {products.filter(applyFilters).map((product) => (
