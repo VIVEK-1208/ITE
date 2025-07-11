@@ -39,8 +39,8 @@ const AddProduct = () => {
   const uploadToCloudinary = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'unsigned_upload'); // 🔁 Replace this
-    formData.append('cloud_name', 'dtiuk5awc');        // 🔁 Replace this
+    formData.append('upload_preset', 'unsigned_upload');
+    formData.append('cloud_name', 'dtiuk5awc');
 
     const res = await fetch('https://api.cloudinary.com/v1_1/dtiuk5awc/image/upload', {
       method: 'POST',

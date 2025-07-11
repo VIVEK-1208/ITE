@@ -1,0 +1,1 @@
+export const BASE_URL = "https://ite-486d.onrender.com";
