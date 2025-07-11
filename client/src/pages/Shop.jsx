@@ -21,7 +21,7 @@ const Shop = () => {
     'dewalt',
     'eibenstock positron',
     'kpt',
-    'polymak'
+    'polymak',
   ];
 
   const brandOptions = [
@@ -33,18 +33,21 @@ const Shop = () => {
     'Others',
   ];
 
-  // Listen to products from Firestore
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'products'), (snapshot) => {
       const fetched = snapshot.docs.map((doc) => {
         const data = doc.data();
-        const brand = data.brand?.toLowerCase();
+        const brand = data.brand || '';
+        const lowerBrand = brand.toLowerCase();
+
+        const displayBrand = knownBrands.includes(lowerBrand) ? brand : 'Others';
+
         return {
           id: doc.id,
           ...data,
-          displayBrand: knownBrands.includes(brand) ? data.brand : 'Others',
-          searchName: data.name?.toLowerCase() || '',
-          originalBrand: data.brand || '',
+          displayBrand,           // For filtering
+          originalBrand: brand,   // For showing true brand
+          searchName: (data.name || '').toLowerCase(),
         };
       });
 
@@ -81,15 +84,15 @@ const Shop = () => {
   };
 
   const applyFilters = (product) => {
-    const brand = product.displayBrand?.toLowerCase();
     const name = product.name?.toLowerCase() || '';
+    const brand = product.displayBrand?.toLowerCase();
     const description = product.description?.toLowerCase() || '';
     const keywords = (product.keywords || []).map((k) => k.toLowerCase());
     const search = filters.search.toLowerCase();
 
     const matchBrand =
       filters.brand.length === 0 ||
-      filters.brand.some((selected) => selected.toLowerCase() === product.displayBrand?.toLowerCase());
+      filters.brand.some((selected) => selected.toLowerCase() === product.displayBrand.toLowerCase());
 
     const matchPrice =
       filters.price.length === 0 ||
@@ -124,16 +127,17 @@ const Shop = () => {
               Brand
               <span className={`arrow ${brandOpen ? 'open' : 'closed'}`}>▲</span>
             </label>
-            {brandOpen && brandOptions.map((brand) => (
-              <div key={brand} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.brand.includes(brand)}
-                  onChange={() => handleBrandChange(brand)}
-                />
-                {brand}
-              </div>
-            ))}
+            {brandOpen &&
+              brandOptions.map((brand) => (
+                <div key={brand} className="filter-option">
+                  <input
+                    type="checkbox"
+                    checked={filters.brand.includes(brand)}
+                    onChange={() => handleBrandChange(brand)}
+                  />
+                  {brand}
+                </div>
+              ))}
           </div>
 
           <div className="filter-group">
@@ -141,16 +145,17 @@ const Shop = () => {
               Price
               <span className={`arrow ${priceOpen ? 'open' : 'closed'}`}>▲</span>
             </label>
-            {priceOpen && ['0-4000', '4000-8000', '8000-12000', '12000-16000', '16000-20000'].map((range) => (
-              <div key={range} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.price.includes(range)}
-                  onChange={() => handlePriceChange(range)}
-                />
-                ₹{range.replace('-', ' - ₹')}
-              </div>
-            ))}
+            {priceOpen &&
+              ['0-4000', '4000-8000', '8000-12000', '12000-16000', '16000-20000'].map((range) => (
+                <div key={range} className="filter-option">
+                  <input
+                    type="checkbox"
+                    checked={filters.price.includes(range)}
+                    onChange={() => handlePriceChange(range)}
+                  />
+                  ₹{range.replace('-', ' - ₹')}
+                </div>
+              ))}
           </div>
 
           <button onClick={clearFilters} className="clear-button">
@@ -158,7 +163,6 @@ const Shop = () => {
           </button>
         </aside>
 
-        {/* Main Shop Section */}
         <main className="shop-main">
           <div className="top-bar">
             <button
@@ -192,7 +196,7 @@ const Shop = () => {
               >
                 <img src={product.image} alt={product.name} />
                 <h4>{product.name}</h4>
-                <p>Brand: {product.displayBrand}</p>
+                <p>Brand: {product.originalBrand}</p>
                 <p>₹{product.price}</p>
               </div>
             ))}
