@@ -47,7 +47,7 @@ const Contact = () => {
           <div className="contact-info">
             <div className="info-item"><span className="icon">📧</span><a href="mailto:...">support@industrialtools.com</a></div>
             <div className="info-item"><span className="icon">📞</span><a href="tel:+91700...">+91 7004656471</a></div>
-            <div className="info-item"><span className="icon">📍</span><span>S-TYPE Chowk, Near Adityapur...</span></div>
+            <div className="info-item"><span className="icon">📍</span><span>S-TYPE Chowk, Near Adityapur Nagar Parishad Office, Seraikela Kharsawan, Jharkhand - 831013</span></div>
           </div>
         </div>
 
